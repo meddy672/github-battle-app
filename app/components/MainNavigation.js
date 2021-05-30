@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 /**
  * show main nav
  */
-export default function MainNavigation({ selected, update }) {
+export default function MainNavigation({ selectedLang, updateListener }) {
 
     const languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python']
     return (
@@ -13,28 +13,28 @@ export default function MainNavigation({ selected, update }) {
                 return (<NavComponent
                     key={reposByLanguage}
                     reposByLanguage={reposByLanguage}
-                    selectedLang={selected}
-                    update={update} />)
+                    selectedLanguage={selectedLang}
+                    update={updateListener} />)
             })}
         </ul>
     )
 }
 
 MainNavigation.propTypes = {
-    selected: PropTypes.string,
-    update: PropTypes.func.isRequired
+    selectedLang: PropTypes.string,
+    updateListener: PropTypes.func.isRequired
 }
 
 /**
  *  navigation component
  */
-function NavComponent({ reposByLanguage, selectedLang, update }) {
+function NavComponent({ reposByLanguage, selectedLanguage, update }) {
 
     return (
         <li>
             <button
                 className="btn-clear nav-link"
-                style={reposByLanguage === selectedLang ? { color: 'rgb(183, 46, 31)' } : null}
+                style={reposByLanguage === selectedLanguage ? { color: 'rgb(183, 46, 31)' } : null}
                 onClick={() => update(reposByLanguage)}>
                 {reposByLanguage}
             </button>

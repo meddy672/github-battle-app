@@ -69,8 +69,8 @@ export default class PopularRepositiories extends React.Component {
         return (
             <main>
                 <MainNavigation
-                    selected={selectedLanguage}
-                    update={this.onUpdateListener}
+                    selectedLang={selectedLanguage}
+                    updateListener={this.onUpdateListener}
                 />
                 {this.isLoading() && <p>LOADING</p>}
                 {error && <p>{error}</p>}
