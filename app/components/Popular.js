@@ -1,38 +1,14 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { fetchPopularRepos } from '../utils/api'
+import { fetchPopularRepos } from '../api/Repositories'
+
+import MainNavigation from './MainNavigation'
+import GridLayout from './GridLayout'
+
 
 /**
- * a component for managing navigation for the app
+ * main component for showing popular repositories
  */
-function LanguagesNav({ selected, onUpdateLanguage }) {
-    const languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python']
-    return (
-        <ul className="flex-center">
-            {languages.map((language) => {
-                return (<li key={language}>
-                    <button
-                        className="btn-clear nav-link"
-                        style={language === selected ? { color: 'rgb(187, 46, 31)' } : null}
-                        onClick={() => onUpdateLanguage(language)}
-                    >
-                        {language}
-                    </button>
-                </li>)
-            })}
-        </ul>
-    )
-}
-
-LanguagesNav.propTypes = {
-    selected: PropTypes.string.isRequired,
-    onUpdateLanguage: PropTypes.func.isRequired
-}
-
-/**
- * a component for managing the popular repositories shown on the ui
- */
-export default class Popular extends React.Component {
+export default class PopularRepositiories extends React.Component {
 
     constructor(props) {
         super(props)
@@ -40,67 +16,69 @@ export default class Popular extends React.Component {
         this.state = {
             selectedLanguage: 'All',
             error: null,
-            repos: {}
+            repositories: {}
         };
 
-        this.updateSelectedLangugae = this.updateSelectedLangugae.bind(this)
+        this.onUpdateListener = this.onUpdateRepositories.bind(this)
     }
 
     /**
-     * once the component is mounted update the ui with all repos
+     * update the ui with all repos
      */
     componentDidMount() {
-        this.updateSelectedLangugae(this.state.selectedLanguage)
+        debugger
+        this.onUpdateRepositories(this.state.selectedLanguage)
     }
 
     /**
-     * get the selected language and update the ui
+     * get repositories by selected language
      */
-    updateSelectedLangugae(selectedLanguage) {
+     onUpdateRepositories(selectedLanguage) {
         this.setState({
-            selectedLanguage: selectedLanguage,
+            selectedLanguage,
             error: null,
         })
         
-        if (!this.state.repos[selectedLanguage]) {
+         if (!this.state.repositories[selectedLanguage]) {
             fetchPopularRepos(selectedLanguage)
-                .then((data) => {
-                    this.setState(({ repos }) => ({
-                        repos: {
-                            ...repos,
-                            [selectedLanguage]: data
+                .then((reposByLanguage) => {
+                    this.setState({
+                        repositories: {
+                            ...reposByLanguage,
+                            [selectedLanguage]: reposByLanguage,
                         }
-                    }))
+                    })
                 })
                 .catch((error) => {
                     this.setState({
                         error: `There was an error fetching the repositories ${error}`
-                    })
                 })
+            })
         }
     }
 
     /**
-     * show loading if there are no repos or errors
+     * loader
      */
     isLoading() {
-        const { selectedLanguage, error } = this.state
+        const { selectedLanguage, error } = this.state        
         return !selectedLanguage && error === null
     }
 
     render() {
-        const { selectedLanguage, repos, error } = this.state
+        const { selectedLanguage, repositories, error } = this.state
+        console.log(selectedLanguage)
         return (
-            <React.Fragment>
-                <LanguagesNav
+            <main>
+                <MainNavigation
                     selected={selectedLanguage}
-                    onUpdateLanguage={this.updateSelectedLangugae}
+                    update={this.onUpdateListener}
                 />
 
                 {this.isLoading() && <p>LOADING</p>}
                 {error && <p>{error}</p>}
-                {repos[selectedLanguage] && <pre>{JSON.stringify(repos[selectedLanguage], null, 2)}</pre>}
-            </React.Fragment>
+                {repositories[selectedLanguage] && <GridLayout reposByLanguage={repositories[selectedLanguage]} />}
+            </main>
         )
     }
 }
