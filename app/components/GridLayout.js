@@ -49,7 +49,7 @@ function Repository({
 }) {
 
     return (
-        <li key={html_url}>
+        <li>
         <h4 className="header-lg center-text">
             #{rank}
         </h4>
