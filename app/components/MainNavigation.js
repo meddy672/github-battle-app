@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 /**
- * main nav for the application
+ * show main nav
  */
 export default function MainNavigation({ selected, update }) {
 
