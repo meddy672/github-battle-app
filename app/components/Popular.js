@@ -67,7 +67,6 @@ export default class PopularRepositiories extends React.Component {
 
     render() {
         const { selectedLanguage, repositories, error } = this.state
-        console.log(selectedLanguage)
         return (
             <main>
                 <MainNavigation
