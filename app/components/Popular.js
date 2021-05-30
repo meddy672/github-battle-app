@@ -1,51 +1,84 @@
 import React from 'react'
+import { fetchPopularRepos } from '../api/Repositories'
 
-function LanguagesNav({ selected, onUpdateLanguage }) {
-    const languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python']
-    return (
-        <ul className="flex-center">
-            {languages.map((language) => {
-                return (<li key={language}>
-                    <button
-                        className="btn-clear nav-link"
-                        style={language === selected ? { color: 'rgb(187, 46, 31)' } : null}
-                        onClick={() => onUpdateLanguage(language)}
-                    >
-                        {language}
-                    </button>
-                </li>)
-            })}
-        </ul>
-    )
-}
+import MainNavigation from './MainNavigation'
+import GridLayout from './GridLayout'
 
-export default class Popular extends React.Component {
+
+/**
+ * main component for showing popular repositories
+ */
+export default class PopularRepositiories extends React.Component {
 
     constructor(props) {
         super(props)
 
         this.state = {
-            selectedLanguage: 'All'
+            selectedLanguage: 'All',
+            error: null,
+            repositories: {}
         };
 
-        this.updateSelectedLangugae = this.updateSelectedLangugae.bind(this)
+        this.onUpdateListener = this.onUpdateRepositories.bind(this)
     }
 
-    updateSelectedLangugae(selectedLanguage) {
+    /**
+     * update the ui with all repos
+     */
+    componentDidMount() {
+        debugger
+        this.onUpdateRepositories(this.state.selectedLanguage)
+    }
+
+    /**
+     * get repositories by selected language
+     */
+     onUpdateRepositories(selectedLanguage) {
         this.setState({
-            selectedLanguage: selectedLanguage
+            selectedLanguage,
+            error: null,
         })
+        
+         if (!this.state.repositories[selectedLanguage]) {
+            fetchPopularRepos(selectedLanguage)
+                .then((reposByLanguage) => {
+                    this.setState({
+                        repositories: {
+                            ...reposByLanguage,
+                            [selectedLanguage]: reposByLanguage,
+                        }
+                    })
+                })
+                .catch((error) => {
+                    this.setState({
+                        error: `There was an error fetching the repositories ${error}`
+                })
+            })
+        }
+    }
+
+    /**
+     * loader
+     */
+    isLoading() {
+        const { selectedLanguage, error } = this.state        
+        return !selectedLanguage && error === null
     }
 
     render() {
-        const { selectedLanguage } = this.state
+        const { selectedLanguage, repositories, error } = this.state
+        console.log(selectedLanguage)
         return (
-            <React.Fragment>
-                <LanguagesNav
+            <main>
+                <MainNavigation
                     selected={selectedLanguage}
-                    onUpdateLanguage={this.updateSelectedLangugae}
+                    update={this.onUpdateListener}
                 />
-            </React.Fragment>
+
+                {this.isLoading() && <p>LOADING</p>}
+                {error && <p>{error}</p>}
+                {repositories[selectedLanguage] && <GridLayout reposByLanguage={repositories[selectedLanguage]} />}
+            </main>
         )
     }
 }
