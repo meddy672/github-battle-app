@@ -26,7 +26,6 @@ export default class PopularRepositiories extends React.Component {
      * update the ui with all repos
      */
     componentDidMount() {
-        debugger
         this.onUpdateRepositories(this.state.selectedLanguage)
     }
 

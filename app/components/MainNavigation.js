@@ -13,7 +13,7 @@ export default function MainNavigation({ selected, update }) {
                 return (<NavComponent
                     key={language}
                     language={language}
-                    selected={selected}
+                    selectedLang={selected}
                     update={update} />)
             })}
         </ul>
@@ -28,13 +28,13 @@ MainNavigation.propTypes = {
 /**
  *  navigation component
  */
-function NavComponent({ language, selected, update }) {
+function NavComponent({ language, selectedLang, update }) {
 
     return (
         <li>
             <button
                 className="btn-clear nav-link"
-                style={language === selected ? { color: 'rgb(187, 46, 31)' } : null}
+                style={language === selectedLang ? { color: 'rgb(187, 46, 31)' } : null}
                 onClick={() => update(language)}
             >
                 {language}
@@ -45,6 +45,6 @@ function NavComponent({ language, selected, update }) {
 
 NavComponent.propTypes = {
     language: PropTypes.string.isRequired,
-    selected: PropTypes.string,
+    selectedLang: PropTypes.string,
     update: PropTypes.func.isRequired
 }
