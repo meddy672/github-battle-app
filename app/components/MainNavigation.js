@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
  * main nav for the application
  */
 export default function MainNavigation({ selected, update }) {
+
     const languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python']
     return (
         <ul className="flex-center">
