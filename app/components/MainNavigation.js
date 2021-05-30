@@ -35,8 +35,7 @@ function NavComponent({ reposByLanguage, selectedLang, update }) {
             <button
                 className="btn-clear nav-link"
                 style={reposByLanguage === selectedLang ? { color: 'rgb(187, 46, 31)' } : null}
-                onClick={() => update(reposByLanguage)}
-            >
+                onClick={() => update(reposByLanguage)}>
                 {reposByLanguage}
             </button>
         </li>
