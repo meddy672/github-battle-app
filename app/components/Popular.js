@@ -60,10 +60,10 @@ export default class PopularRepositiories extends React.Component {
      * loader
      */
     isLoading() {
-        const { selectedLanguage, error } = this.state        
-        return !selectedLanguage && error === null
+        const { selectedLanguage, repositories, error } = this.state        
+        return !repositories[selectedLanguage] && error === null
     }
-
+    
     render() {
         const { selectedLanguage, repositories, error } = this.state
         return (
@@ -72,7 +72,6 @@ export default class PopularRepositiories extends React.Component {
                     selected={selectedLanguage}
                     update={this.onUpdateListener}
                 />
-
                 {this.isLoading() && <p>LOADING</p>}
                 {error && <p>{error}</p>}
                 {repositories[selectedLanguage] && <GridLayout reposByLanguage={repositories[selectedLanguage]} />}

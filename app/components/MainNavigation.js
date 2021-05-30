@@ -9,10 +9,10 @@ export default function MainNavigation({ selected, update }) {
     const languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python']
     return (
         <ul className="flex-center">
-            {languages.map((language) => {
+            {languages.map((reposBylanguage) => {
                 return (<NavComponent
-                    key={language}
-                    language={language}
+                    key={reposBylanguage}
+                    reposBylanguage={reposBylanguage}
                     selectedLang={selected}
                     update={update} />)
             })}
@@ -28,23 +28,23 @@ MainNavigation.propTypes = {
 /**
  *  navigation component
  */
-function NavComponent({ language, selectedLang, update }) {
+function NavComponent({ reposBylanguage, selectedLang, update }) {
 
     return (
         <li>
             <button
                 className="btn-clear nav-link"
-                style={language === selectedLang ? { color: 'rgb(187, 46, 31)' } : null}
-                onClick={() => update(language)}
+                style={reposBylanguage === selectedLang ? { color: 'rgb(187, 46, 31)' } : null}
+                onClick={() => update(reposBylanguage)}
             >
-                {language}
+                {reposBylanguage}
             </button>
         </li>
     )
 }
 
 NavComponent.propTypes = {
-    language: PropTypes.string.isRequired,
+    reposBylanguage: PropTypes.string.isRequired,
     selectedLang: PropTypes.string,
     update: PropTypes.func.isRequired
 }
