@@ -35,7 +35,9 @@ GridLayout.propTypes = {
     reposByLanguage: PropTypes.array.isRequired
 }
 
-
+/**
+ * a component for repositories
+ */
 function Repository({
     rank,
     name,
