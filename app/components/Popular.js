@@ -32,44 +32,51 @@ export default class PopularRepositiories extends React.Component {
     /**
      * get repositories by selected language
      */
-     onUpdateRepositories(selectedLanguage) {
+    onUpdateRepositories(selectedLanguage) {
         this.setState({
             selectedLanguage,
             error: null,
         })
-        
-         if (!this.state.repositories[selectedLanguage]) {
+
+        if (!this.exsist(selectedLanguage)) {
             fetchPopularRepos(selectedLanguage)
-                .then((reposByLanguage) => {
-                    this.setState({
-                        repositories: {
-                            ...reposByLanguage,
-                            [selectedLanguage]: reposByLanguage,
-                        }
-                    })
+            .then((reposByLanguage) => {
+                this.setState({
+                    repositories: {
+                        [selectedLanguage]: reposByLanguage,
+                    }
                 })
-                .catch((error) => {
-                    this.setState({
-                        error: `There was an error fetching the repositories ${error}`
+            })
+            .catch((error) => {
+                this.setState({
+                    error: `There was an error fetching the repositories ${error}`
                 })
             })
         }
+
+    }
+
+    /**
+     * check if repository exsists in object
+     */
+    exsist(selectedLanguage){
+        return this.state.repositories[selectedLanguage]
     }
 
     /**
      * loader
      */
     isLoading() {
-        const { selectedLanguage, repositories, error } = this.state        
+        const { selectedLanguage, repositories, error } = this.state
         return !repositories[selectedLanguage] && error === null
     }
-    
+
     render() {
         const { selectedLanguage, repositories, error } = this.state
         return (
             <main>
                 <MainNavigation
-                    selectedLang={selectedLanguage}
+                    selectedLanguage={selectedLanguage}
                     updateListener={this.onUpdateListener}
                 />
                 {this.isLoading() && <p>LOADING</p>}

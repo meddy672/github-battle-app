@@ -4,16 +4,16 @@ import PropTypes from 'prop-types'
 /**
  * show main nav
  */
-export default function MainNavigation({ selectedLang, updateListener }) {
+export default function MainNavigation({ selectedLanguage, updateListener }) {
 
     const languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python']
     return (
-        <ul className="flex-center">
+        <ul role="navigation" className="flex-center">
             {languages.map((reposByLanguage) => {
                 return (<NavComponent
                     key={reposByLanguage}
                     reposByLanguage={reposByLanguage}
-                    selectedLanguage={selectedLang}
+                    selectedLanguage={selectedLanguage}
                     update={updateListener} />)
             })}
         </ul>
@@ -21,18 +21,19 @@ export default function MainNavigation({ selectedLang, updateListener }) {
 }
 
 MainNavigation.propTypes = {
-    selectedLang: PropTypes.string,
+    selectedLanguage: PropTypes.string.isRequired,
     updateListener: PropTypes.func.isRequired
 }
 
 /**
  *  navigation component
  */
-function NavComponent({ reposByLanguage, selectedLanguage, update }) {
+export function NavComponent({ reposByLanguage, selectedLanguage, update }) {
 
     return (
         <li>
             <button
+                role="button"
                 className="btn-clear nav-link"
                 style={reposByLanguage === selectedLanguage ? { color: 'rgb(183, 46, 31)' } : null}
                 onClick={() => update(reposByLanguage)}>
@@ -44,6 +45,6 @@ function NavComponent({ reposByLanguage, selectedLanguage, update }) {
 
 NavComponent.propTypes = {
     reposByLanguage: PropTypes.string.isRequired,
-    selectedLang: PropTypes.string,
+    selectedLanguage: PropTypes.string.isRequired,
     update: PropTypes.func.isRequired
 }
